@@ -103,7 +103,7 @@ class Evaluator:
                 message = llm_chat_completion.choices[0].message
                 usage = llm_chat_completion.usage
                 content = message.content
-                reasoning_content = message.reasoning_content
+                reasoning_content = getattr(message, "reasoning_content", None)
 
                 question_text, correct_answer, question_id = future_to_data[future]
                 predicted_answer = self.evaluation_strategy.extract_answer(content)
@@ -123,7 +123,7 @@ class Evaluator:
                         "question": question_text,
                         "correct_answer": correct_answer,
                         "llm_output": content,
-                        "llm_resoning_output": reasoning_content,
+                        "llm_reasoning_output": reasoning_content,
                         "predicted_answer": predicted_answer,
                         "is_correct": is_correct,
                         "usage_completion_tokens": usage.completion_tokens,
